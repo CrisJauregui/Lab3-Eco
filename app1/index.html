@@ -1,17 +1,148 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>APP 1</title>
+    <title>Delivery App - Consumidor</title>
     <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
-    <h1>APP 1</h1>
-    <button id="get-btn">GET</button>
+    <div id="app">
+        <!-- Login Screen -->
+        <div id="login-screen" class="screen active">
+            <div class="container">
+                <h1>Bienvenido Consumidor</h1>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" placeholder="consumer@test.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Contraseña:</label>
+                        <input type="password" id="password" placeholder="123456" required>
+                    </div>
+                    <button type="submit">Iniciar Sesión</button>
+                </form>
+                <div id="login-error" class="error hidden"></div>
+            
+            </div>
+        </div>
+
+        <!-- Stores Screen -->
+        <div id="stores-screen" class="screen">
+            <div class="container">
+                <div class="header">
+                    <h1>Tiendas Disponibles</h1>
+                    <div class="user-info">
+                        <span id="user-name"></span>
+                        <button id="logout-btn" class="secondary">Cerrar Sesión</button>
+                        <button id="view-orders-btn" class="secondary">Mis Órdenes</button>
+                    </div>
+                </div>
+                <div id="stores-list" class="stores-grid">
+                    <!-- Stores will be loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Products Screen -->
+        <div id="products-screen" class="screen">
+            <div class="container">
+                <div class="header">
+                    <button id="back-to-stores" class="secondary">← Volver a Tiendas</button>
+                    <h1 id="store-name"></h1>
+                    <div class="cart-info">
+                        <button id="view-cart-btn">Carrito (<span id="cart-count">0</span>)</button>
+                    </div>
+                </div>
+                <div id="products-list" class="products-grid">
+                    <!-- Products will be loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Cart Screen -->
+        <div id="cart-screen" class="screen">
+            <div class="container">
+                <div class="header">
+                    <button id="back-to-products" class="secondary">← Volver a Productos</button>
+                    <h1>Mi Carrito</h1>
+                </div>
+                <div id="cart-items" class="cart-list">
+                    <!-- Cart items will be loaded here -->
+                </div>
+                <div class="cart-summary">
+                    <div class="total">
+                        <strong>Total: $<span id="cart-total">0</span></strong>
+                    </div>
+                    <button id="checkout-btn" class="primary">Proceder al Pago</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Checkout Screen -->
+        <div id="checkout-screen" class="screen">
+            <div class="container">
+                <div class="header">
+                    <button id="back-to-cart" class="secondary">← Volver al Carrito</button>
+                    <h1>Finalizar Pedido</h1>
+                </div>
+                <form id="checkout-form">
+                    <div class="form-group">
+                        <label for="delivery-address">Dirección de Entrega:</label>
+                        <textarea id="delivery-address" placeholder="Ingresa tu dirección completa" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="payment-method">Método de Pago:</label>
+                        <select id="payment-method" required>
+                            <option value="">Selecciona un método</option>
+                            <option value="card">Tarjeta de Crédito</option>
+                            <option value="cash">Efectivo</option>
+                            <option value="transfer">Transferencia</option>
+                        </select>
+                    </div>
+                    <div class="order-summary">
+                        <h3>Resumen del Pedido</h3>
+                        <div id="checkout-items"></div>
+                        <div class="total">
+                            <strong>Total: $<span id="checkout-total">0</span></strong>
+                        </div>
+                    </div>
+                    <button type="submit" class="primary">Confirmar Pedido</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Orders Screen -->
+        <div id="orders-screen" class="screen">
+            <div class="container">
+                <div class="header">
+                    <button id="back-to-stores-from-orders" class="secondary">← Volver a Tiendas</button>
+                    <h1>Mis Órdenes</h1>
+                </div>
+                <div id="orders-list" class="orders-list">
+                    <!-- Orders will be loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Success Screen -->
+        <div id="success-screen" class="screen">
+            <div class="container">
+                <div class="success-message">
+                    <h1>¡Pedido Confirmado!</h1>
+                    <p>Tu pedido ha sido creado exitosamente y está siendo procesado.</p>
+                    <div class="order-info">
+                        <p>Número de orden: <span id="order-number"></span></p>
+                        <p>Total: $<span id="order-total"></span></p>
+                    </div>
+                    <button id="continue-shopping" class="primary">Continuar Comprando</button>
+                    <button id="view-my-orders" class="secondary">Ver Mis Órdenes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="index.js"></script>
 </body>
-
 </html>

@@ -1,19 +1,193 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>APP 2</title>
+    <title>Delivery App - Tienda</title>
     <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
-    <h1>App 2</h1>
-    <button id="get-btn">GET</button>
+    <div id="app">
+        <!-- Login Screen -->
+        <div id="login-screen" class="screen active">
+            <div class="container">
+                <h1>Panel de Tienda</h1>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" placeholder="store@test.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Contraseña:</label>
+                        <input type="password" id="password" placeholder="123456" required>
+                    </div>
+                    <button type="submit">Iniciar Sesión</button>
+                </form>
+                <div id="login-error" class="error hidden"></div>
+                
+            </div>
+        </div>
+
+        <!-- Dashboard Screen -->
+        <div id="dashboard-screen" class="screen">
+            <div class="container">
+                <div class="header">
+                    <h1 id="store-name"></h1>
+                    <div class="header-controls">
+                        <div class="store-status">
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="store-toggle">
+                                <span class="slider"></span>
+                            </label>
+                            <span id="status-text">Cerrada</span>
+                        </div>
+                        <button id="logout-btn" class="secondary">Cerrar Sesión</button>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <!-- Store Stats -->
+                    <div class="stats-card">
+                        <h3>Estadísticas</h3>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <span class="stat-number" id="total-orders">0</span>
+                                <span class="stat-label">Órdenes Totales</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number" id="pending-orders">0</span>
+                                <span class="stat-label">Pendientes</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number" id="total-products">0</span>
+                                <span class="stat-label">Productos</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="actions-card">
+                        <h3>Acciones Rápidas</h3>
+                        <div class="actions-grid">
+                            <button id="add-product-btn" class="primary">
+                                📦 Nuevo Producto
+                            </button>
+                            <button id="view-orders-btn" class="secondary">
+                                📋 Ver Órdenes
+                            </button>
+                            <button id="manage-products-btn" class="secondary">
+                                🛒 Gestionar Productos
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Orders -->
+                <div class="recent-orders">
+                    <h3>Órdenes Recientes</h3>
+                    <div id="recent-orders-list" class="orders-list">
+                        <!-- Recent orders will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Products Management Screen -->
+        <div id="products-screen" class="screen">
+            <div class="container">
+                <div class="header">
+                    <button id="back-to-dashboard" class="secondary">← Volver al Panel</button>
+                    <h1>Gestión de Productos</h1>
+                    <button id="add-product-btn-2" class="primary">Nuevo Producto</button>
+                </div>
+                <div id="products-list" class="products-grid">
+                    <!-- Products will be loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Product Modal -->
+        <div id="product-modal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Nuevo Producto</h2>
+                    <button id="close-modal" class="close-btn">&times;</button>
+                </div>
+                <form id="product-form">
+                    <div class="form-group">
+                        <label for="product-name">Nombre del Producto:</label>
+                        <input type="text" id="product-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="product-price">Precio:</label>
+                        <input type="number" id="product-price" min="0" step="100" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="product-category">Categoría:</label>
+                        <select id="product-category" required>
+                            <option value="">Seleccionar categoría</option>
+                            <option value="food">Comida</option>
+                            <option value="drink">Bebida</option>
+                            <option value="medicine">Medicina</option>
+                            <option value="grocery">Abarrotes</option>
+                            <option value="electronics">Electrónicos</option>
+                            <option value="other">Otro</option>
+                        </select>
+                    </div>
+                    <div class="modal-buttons">
+                        <button type="button" id="cancel-product" class="secondary">Cancelar</button>
+                        <button type="submit" class="primary">Crear Producto</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Orders Screen -->
+        <div id="orders-screen" class="screen">
+            <div class="container">
+                <div class="header">
+                    <button id="back-to-dashboard-2" class="secondary">← Volver al Panel</button>
+                    <h1>Gestión de Órdenes</h1>
+                    <div class="order-filters">
+                        <select id="order-filter">
+                            <option value="all">Todas las órdenes</option>
+                            <option value="pending">Pendientes</option>
+                            <option value="accepted">Aceptadas</option>
+                            <option value="preparing">Preparando</option>
+                            <option value="ready">Listas</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="orders-list" class="orders-list">
+                    <!-- Orders will be loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Details Modal -->
+        <div id="order-modal" class="modal hidden">
+            <div class="modal-content large">
+                <div class="modal-header">
+                    <h2>Detalles de la Orden #<span id="order-number"></span></h2>
+                    <button id="close-order-modal" class="close-btn">&times;</button>
+                </div>
+                <div id="order-details" class="order-details">
+                    <!-- Order details will be loaded here -->
+                </div>
+                <div class="modal-buttons">
+                    <button id="accept-order" class="primary hidden">Aceptar Orden</button>
+                    <button id="reject-order" class="secondary hidden">Rechazar</button>
+                    <button id="mark-ready" class="success hidden">Marcar como Listo</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Success Message -->
+        <div id="success-message" class="success-toast hidden">
+            <span id="success-text"></span>
+        </div>
+    </div>
 
     <script src="index.js"></script>
-
 </body>
-
 </html>

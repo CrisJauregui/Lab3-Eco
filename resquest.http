@@ -1,13 +1,16 @@
 ## install REST Client or humao.rest-client to execute this
 
+### Test basic endpoint
 GET http://localhost:5050/users
 
 ###
 
+### Test query parameters
 GET http://localhost:5050/obtener?search=hola&age=20
 
 ###
 
+### Create user (original test)
 POST http://localhost:5050/crear 
 Content-Type: application/json
 
@@ -19,6 +22,7 @@ Content-Type: application/json
 
 ### 
 
+### Update user (original test)
 PUT http://localhost:5050/actualizar/1 
 Content-Type: application/json
 
@@ -27,3 +31,387 @@ Content-Type: application/json
     "age": 28,
     "job": "UI developer"
 }
+
+###############################################
+### DELIVERY APP API TESTS
+###############################################
+
+### Consumer Login
+POST http://localhost:5050/login
+Content-Type: application/json
+
+{
+    "email": "consumer@test.com",
+    "password": "123456"
+}
+
+###
+
+### Store Login
+POST http://localhost:5050/login
+Content-Type: application/json
+
+{
+    "email": "store@test.com",
+    "password": "123456"
+}
+
+###
+
+### Delivery Login
+POST http://localhost:5050/login
+Content-Type: application/json
+
+{
+    "email": "delivery@test.com",
+    "password": "123456"
+}
+
+###
+
+### Get all available stores
+GET http://localhost:5050/stores
+
+###
+
+### Get products from store 1
+GET http://localhost:5050/stores/1/products
+
+###
+
+### Get products from store 2
+GET http://localhost:5050/stores/2/products
+
+###
+
+### Create a new order
+POST http://localhost:5050/orders
+Content-Type: application/json
+
+{
+    "userId": 1,
+    "storeId": 1,
+    "products": [
+        {
+            "productId": 1,
+            "quantity": 2
+        },
+        {
+            "productId": 2,
+            "quantity": 1
+        }
+    ],
+    "deliveryAddress": "Calle 123 #45-67, Barrio Centro, Cali",
+    "paymentMethod": "card"
+}
+
+###
+
+### Get orders for user 1
+GET http://localhost:5050/users/1/orders
+
+###
+
+### Activate store (open for business)
+PUT http://localhost:5050/stores/1/status
+Content-Type: application/json
+
+{
+    "isOpen": true
+}
+
+###
+
+### Deactivate store (close for business)
+PUT http://localhost:5050/stores/1/status
+Content-Type: application/json
+
+{
+    "isOpen": false
+}
+
+###
+
+### Create a new product in store 1
+POST http://localhost:5050/stores/1/products
+Content-Type: application/json
+
+{
+    "name": "Hamburguesa Especial",
+    "price": 18000,
+    "category": "food"
+}
+
+###
+
+### Create a product in pharmacy (store 2)
+POST http://localhost:5050/stores/2/products
+Content-Type: application/json
+
+{
+    "name": "Ibuprofeno 600mg",
+    "price": 12000,
+    "category": "medicine"
+}
+
+###
+
+### Get orders for store 1
+GET http://localhost:5050/stores/1/orders
+
+###
+
+### Get available orders for delivery
+GET http://localhost:5050/delivery/orders
+
+###
+
+### Accept a delivery order (delivery person 3 accepts order 1)
+PUT http://localhost:5050/delivery/orders/1/accept
+Content-Type: application/json
+
+{
+    "deliveryPersonId": 3
+}
+
+###
+
+### Get orders assigned to delivery person 3
+GET http://localhost:5050/delivery/3/orders
+
+###
+
+### Create multiple orders for testing
+POST http://localhost:5050/orders
+Content-Type: application/json
+
+{
+    "userId": 1,
+    "storeId": 2,
+    "products": [
+        {
+            "productId": 3,
+            "quantity": 1
+        }
+    ],
+    "deliveryAddress": "Avenida 6N #23-45, Barrio San Fernando, Cali",
+    "paymentMethod": "cash"
+}
+
+###
+
+### Create another order
+POST http://localhost:5050/orders
+Content-Type: application/json
+
+{
+    "userId": 1,
+    "storeId": 3,
+    "products": [
+        {
+            "productId": 4,
+            "quantity": 3
+        }
+    ],
+    "deliveryAddress": "Carrera 15 #100-25, Barrio El Peñón, Cali",
+    "paymentMethod": "transfer"
+}
+
+###
+
+### Test with invalid login credentials
+POST http://localhost:5050/login
+Content-Type: application/json
+
+{
+    "email": "invalid@test.com",
+    "password": "wrongpassword"
+}
+
+###
+
+### Test creating order without required fields
+POST http://localhost:5050/orders
+Content-Type: application/json
+
+{
+    "userId": 1,
+    "storeId": 1
+}
+
+###
+
+### Test getting products from non-existent store
+GET http://localhost:5050/stores/999/products
+
+###
+
+### Test accepting non-existent order
+PUT http://localhost:5050/delivery/orders/999/accept
+Content-Type: application/json
+
+{
+    "deliveryPersonId": 3
+}
+
+###
+
+### Create product with missing fields (should fail)
+POST http://localhost:5050/stores/1/products
+Content-Type: application/json
+
+{
+    "name": "Product without price"
+}
+
+###############################################
+### LOAD TESTING / MULTIPLE ORDERS
+###############################################
+
+### Create order 1 (Pizza order)
+POST http://localhost:5050/orders
+Content-Type: application/json
+
+{
+    "userId": 1,
+    "storeId": 1,
+    "products": [
+        {
+            "productId": 1,
+            "quantity": 1
+        }
+    ],
+    "deliveryAddress": "Calle 5 #10-20, Barrio Granada, Cali",
+    "paymentMethod": "card"
+}
+
+###
+
+### Create order 2 (Pharmacy order)
+POST http://localhost:5050/orders
+Content-Type: application/json
+
+{
+    "userId": 1,
+    "storeId": 2,
+    "products": [
+        {
+            "productId": 3,
+            "quantity": 2
+        }
+    ],
+    "deliveryAddress": "Carrera 10 #50-30, Barrio El Limonar, Cali",
+    "paymentMethod": "cash"
+}
+
+###
+
+### Create order 3 (Grocery order)
+POST http://localhost:5050/orders
+Content-Type: application/json
+
+{
+    "userId": 1,
+    "storeId": 3,
+    "products": [
+        {
+            "productId": 4,
+            "quantity": 5
+        }
+    ],
+    "deliveryAddress": "Avenida 3N #40-15, Barrio Versalles, Cali",
+    "paymentMethod": "transfer"
+}
+
+###############################################
+### TESTING WORKFLOW
+###############################################
+
+### Step 1: Consumer logs in
+POST http://localhost:5050/login
+Content-Type: application/json
+
+{
+    "email": "consumer@test.com",
+    "password": "123456"
+}
+
+###
+
+### Step 2: Get available stores
+GET http://localhost:5050/stores
+
+###
+
+### Step 3: Store admin logs in and opens store
+POST http://localhost:5050/login
+Content-Type: application/json
+
+{
+    "email": "store@test.com",
+    "password": "123456"
+}
+
+###
+
+### Step 4: Store opens for business
+PUT http://localhost:5050/stores/1/status
+Content-Type: application/json
+
+{
+    "isOpen": true
+}
+
+###
+
+### Step 5: Consumer creates order
+POST http://localhost:5050/orders
+Content-Type: application/json
+
+{
+    "userId": 1,
+    "storeId": 1,
+    "products": [
+        {
+            "productId": 1,
+            "quantity": 1
+        },
+        {
+            "productId": 2,
+            "quantity": 1
+        }
+    ],
+    "deliveryAddress": "Calle Principal #123, Centro, Cali",
+    "paymentMethod": "card"
+}
+
+###
+
+### Step 6: Delivery person logs in
+POST http://localhost:5050/login
+Content-Type: application/json
+
+{
+    "email": "delivery@test.com",
+    "password": "123456"
+}
+
+###
+
+### Step 7: Delivery person sees available orders
+GET http://localhost:5050/delivery/orders
+
+###
+
+### Step 8: Delivery person accepts the order
+PUT http://localhost:5050/delivery/orders/1/accept
+Content-Type: application/json
+
+{
+    "deliveryPersonId": 3
+}
+
+###
+
+### Step 9: Check delivery person's assigned orders
+GET http://localhost:5050/delivery/3/orders

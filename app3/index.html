@@ -1,17 +1,201 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>APP 3</title>
+    <title>Delivery App - Repartidor</title>
     <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
-    <h1>APP 3</h1>
-    <button id="get-btn">GET</button>
+    <div id="app">
+        <!-- Login Screen -->
+        <div id="login-screen" class="screen active">
+            <div class="container">
+                <h1>Panel de Repartidor</h1>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" placeholder="delivery@test.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Contraseña:</label>
+                        <input type="password" id="password" placeholder="123456" required>
+                    </div>
+                    <button type="submit">Iniciar Sesión</button>
+                </form>
+                <div id="login-error" class="error hidden"></div>
+                
+            </div>
+        </div>
+
+        <!-- Dashboard Screen -->
+        <div id="dashboard-screen" class="screen">
+            <div class="container">
+                <div class="header">
+                    <h1>Bienvenido, <span id="delivery-name"></span></h1>
+                    <div class="header-controls">
+                        <div class="delivery-status">
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="availability-toggle">
+                                <span class="slider"></span>
+                            </label>
+                            <span id="availability-text">No Disponible</span>
+                        </div>
+                        <button id="logout-btn" class="secondary">Cerrar Sesión</button>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <!-- Delivery Stats -->
+                    <div class="stats-card">
+                        <h3>Estadísticas del Día</h3>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <span class="stat-number" id="total-deliveries">0</span>
+                                <span class="stat-label">Entregas Totales</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number" id="active-deliveries">0</span>
+                                <span class="stat-label">Activas</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number" id="earnings">$0</span>
+                                <span class="stat-label">Ganancias</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="actions-card">
+                        <h3>Acciones</h3>
+                        <div class="actions-grid">
+                            <button id="view-available-btn" class="primary">
+                                🛒 Órdenes Disponibles
+                            </button>
+                            <button id="my-deliveries-btn" class="secondary">
+                                🚚 Mis Entregas
+                            </button>
+                            <button id="earnings-btn" class="secondary">
+                                💰 Ver Ganancias
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Current Delivery -->
+                <div id="current-delivery" class="current-delivery hidden">
+                    <h3>Entrega Actual</h3>
+                    <div id="current-delivery-info" class="delivery-card">
+                        <!-- Current delivery info will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Available Orders Screen -->
+        <div id="available-screen" class="screen">
+            <div class="container">
+                <div class="header">
+                    <button id="back-to-dashboard" class="secondary">← Volver al Panel</button>
+                    <h1>Órdenes Disponibles</h1>
+                    <div class="refresh-controls">
+                        <button id="refresh-orders" class="primary">🔄 Actualizar</button>
+                    </div>
+                </div>
+                <div id="available-orders-list" class="orders-list">
+                    
+                </div>
+            </div>
+        </div>
+
+        <!-- My Deliveries Screen -->
+        <div id="deliveries-screen" class="screen">
+            <div class="container">
+                <div class="header">
+                    <button id="back-to-dashboard-2" class="secondary">← Volver al Panel</button>
+                    <h1>Mis Entregas</h1>
+                    <div class="delivery-filters">
+                        <select id="delivery-filter">
+                            <option value="all">Todas</option>
+                            <option value="accepted">Aceptadas</option>
+                            <option value="picked-up">Recogidas</option>
+                            <option value="delivering">En camino</option>
+                            <option value="delivered">Entregadas</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="deliveries-list" class="orders-list">
+                    
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Details Modal -->
+        <div id="order-modal" class="modal hidden">
+            <div class="modal-content large">
+                <div class="modal-header">
+                    <h2>Detalles de la Orden #<span id="modal-order-number"></span></h2>
+                    <button id="close-order-modal" class="close-btn">&times;</button>
+                </div>
+                <div id="modal-order-details" class="order-details">
+                    
+                </div>
+                <div class="modal-buttons">
+                    <button id="accept-delivery" class="primary hidden">Aceptar Entrega</button>
+                    <button id="pickup-order" class="success hidden">Marcar como Recogido</button>
+                    <button id="complete-delivery" class="success hidden">Completar Entrega</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Earnings Screen -->
+        <div id="earnings-screen" class="screen">
+            <div class="container">
+                <div class="header">
+                    <button id="back-to-dashboard-3" class="secondary">← Volver al Panel</button>
+                    <h1>Mis Ganancias</h1>
+                </div>
+                
+                <div class="earnings-summary">
+                    <div class="earnings-card">
+                        <h3>Resumen del Día</h3>
+                        <div class="earnings-stats">
+                            <div class="earning-item">
+                                <span class="earning-label">Entregas completadas:</span>
+                                <span class="earning-value" id="completed-today">0</span>
+                            </div>
+                            <div class="earning-item">
+                                <span class="earning-label">Ganancia total:</span>
+                                <span class="earning-value" id="total-earnings">$0</span>
+                            </div>
+                            <div class="earning-item">
+                                <span class="earning-label">Promedio por entrega:</span>
+                                <span class="earning-value" id="average-earning">$0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="earnings-history">
+                    <h3>Historial de Entregas</h3>
+                    <div id="earnings-list" class="earnings-list">
+                      
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Success Message -->
+        <div id="success-message" class="success-toast hidden">
+            <span id="success-text"></span>
+        </div>
+
+        <!-- Loading Spinner -->
+        <div id="loading" class="loading hidden">
+            <div class="spinner"></div>
+        </div>
+    </div>
+
     <script src="index.js"></script>
 </body>
-
 </html>
